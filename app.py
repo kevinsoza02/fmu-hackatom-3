@@ -1,9 +1,12 @@
 import os
 
 from dotenv import load_dotenv
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for, jsonify
 
-from app.application.route_guard import login_required
+from app.application.utils.route_guard import login_required
+from app.application.utils.data_validation import data_validation
+
+from app.domain.dtos.login_dto import LoginDto
 
 load_dotenv()
 
@@ -14,13 +17,26 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        # *********** Lógica de Autenticação Real Aqui ***********
-        # Exemplo: Se o username e senha estiverem corretos:
-        # 1. Define uma chave na session para indicar que o usuário está logado
-        session['user_id'] = 123
-        session['username'] = 'ExemploUser'
-        next_url = request.args.get('next')
-        return redirect(next_url or url_for('index'))
+        if request.is_json:
+            # valida o corpo da requisição
+            data = request.get_json()
+            data = data_validation(data)
+            if data is None:
+                return jsonify({'error': 'Invalid data'}), 400 
+            
+            # valida o conteudo da requisição
+            try:
+                login_dto = LoginDto(**data)
+            except TypeError as e:
+                return jsonify({"error": f"Invalid data. Error: {e}"}), 400
+            
+            
+            session['user_id'] = 123
+            session['username'] = 'ExemploUser'
+            next_url = request.args.get('next')
+            return redirect(next_url or url_for('index'))
+        else: 
+            return jsonify({'error': 'Invalid data'}), 400
     return render_template('login/login.html')
 
 @app.route('/logout')
