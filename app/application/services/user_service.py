@@ -15,8 +15,3 @@ class UserService:
                 return user
             return None
         return None
-
-    def add_new_user(self, user_data):
-        if not user_data.get('name'):
-            raise ValueError("Nome é obrigatório.")
-        return self.user_repository.create(user_data)

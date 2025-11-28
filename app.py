@@ -1,5 +1,7 @@
 import os
+import json
 
+from dataclasses import asdict
 from dotenv import load_dotenv
 from flask import Flask, render_template, request, session, redirect, url_for, jsonify
 
@@ -9,6 +11,7 @@ from app.application.utils.data_validation import data_validation
 from app.domain.dtos.login_dto import LoginDto
 
 from app.application.services.user_service import UserService
+from app.application.services.user_account_service import UserAccountService
 
 load_dotenv()
 
@@ -17,6 +20,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 user_service = UserService()
+user_account_service = UserAccountService()
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -56,8 +60,20 @@ def logout():
     return redirect(url_for('login'))
 
 @app.route('/')
+@login_required
 def index():
-    return render_template('home/home.html')
-
+    user_id = session.get('user_id')
+    user_name = session.get('username')
+    account = user_account_service.get_user_account_by_user_id(user_id)
+    if not account:
+        return jsonify({'error': 'Invalid data'}), 400
+    return render_template(
+        'home/home.html',
+        balance=account.balance,
+        account=account.account,
+        agency=account.agency,
+        username=user_name,
+    )
+            
 if __name__ == '__main__':
     app.run(debug=True)

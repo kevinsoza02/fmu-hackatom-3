@@ -21,7 +21,7 @@
 
             <p class="text-center text-white text-lg leading-snug font-medium">
                 Olá,<br>
-                <span class="text-xl font-bold">João da Silva</span>
+                <span class="text-xl font-bold">{{ username }}</span>
             </p>
         </div>
 
@@ -29,19 +29,14 @@
 </header>
 
 <div class="mx-[30px] pb-20"> 
-
     {% block saldo %}
-    {% set saldo_disponivel = "5.000,00" %}
-    {% set conta = "12345-6" %}
-    {% set agencia = "0001" %}
-    
     <section class="bg-[#111111] text-white rounded-xl py-6 font-orbitron mt-6"> 
         <div class="px-[30px]">
             <h2 class="text-lg font-semibold mb-2">Saldo disponível</h2>
-            <p class="text-3xl font-semibold text-[#d4d4d4] mb-1">$ {{ saldo_disponivel }}</p>
+            <p class="text-3xl font-semibold text-[#d4d4d4] mb-1">$ {{ balance }}</p>
             <p class="text-sm text-[#CCCCCC]">
-                Conta: {{ conta }}<br>
-                Agência: {{ agencia }}
+                Conta: {{ account }}<br>
+                Agência: {{ agency }}
             </p>
         </div>
     </section>
