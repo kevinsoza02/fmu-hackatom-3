@@ -8,11 +8,15 @@ from app.application.utils.data_validation import data_validation
 
 from app.domain.dtos.login_dto import LoginDto
 
+from app.application.services.user_service import UserService
+
 load_dotenv()
 
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+
+user_service = UserService()
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

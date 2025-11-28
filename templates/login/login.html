@@ -3,4 +3,27 @@
 {% block title %} Banco anco | Login {% endblock %}
 
 {% block body %}
+    <div class="min-h-[100vh] flex flex-col items-center justify-center bg-[#1E1E1E] p-[15px]">
+        <img class="size-fit mb-[.5rem]" src="{{ url_for('static', filename='images/logo2.png') }}">
+        <h1 class="text-[#eee] text-[3rem] mb-[2rem]">Banco</h1>
+        <form class="flex flex-col">
+            {% with 
+                id="email", 
+                title="Email", 
+                placeholder="Digite seu email", 
+                required="true" 
+            %}
+                {% include 'partials/input-text.html' %}
+            {% endwith %}
+            {% with 
+                id="pwd", 
+                title="Senha", 
+                placeholder="Digite sua Senha", 
+                required="true" 
+            %}
+                {% include 'partials/input-text.html' %}
+            {% endwith %}
+            <input class="bg-[#eee] text-[#1E1E1E] text-[1.5rem] mt-[2rem] py-[.25rem]" type="submit" value="Entrar">
+        </form>
+    </div>
 {% endblock %}
