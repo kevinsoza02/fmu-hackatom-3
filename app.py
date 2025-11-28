@@ -23,8 +23,7 @@ def login():
     if request.method == 'POST':
         if request.is_json:
             # valida o corpo da requisição
-            data = request.get_json()
-            data = data_validation(data)
+            data = data_validation()
             if data is None:
                 return jsonify({'error': 'Invalid data'}), 400 
             
@@ -34,11 +33,18 @@ def login():
             except TypeError as e:
                 return jsonify({"error": f"Invalid data. Error: {e}"}), 400
             
+            user = user_service.login_user(login_dto)
+            if not user:
+                return jsonify({'error': 'Wrong email or password'}), 400
             
-            session['user_id'] = 123
-            session['username'] = 'ExemploUser'
+            session['user_id'] = user.id
+            session['username'] = user.name
             next_url = request.args.get('next')
-            return redirect(next_url or url_for('index'))
+            return jsonify({
+                    "success": True, 
+                    "message": "Login realizado com sucesso! Redirecionando...",
+                    "redirect_url": "/" 
+                }), 200
         else: 
             return jsonify({'error': 'Invalid data'}), 400
     return render_template('login/login.html')
