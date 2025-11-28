@@ -6,24 +6,28 @@
     <div class="min-h-[100vh] flex flex-col items-center justify-center bg-[#1E1E1E] p-[15px]">
         <img class="size-fit mb-[.5rem]" src="{{ url_for('static', filename='images/logo2.png') }}">
         <h1 class="text-[#eee] text-[3rem] mb-[2rem]">Banco</h1>
-        <form class="flex flex-col">
+        <form id="loginForm" method="POST" class="flex flex-col">
             {% with 
                 id="email", 
                 title="Email", 
+                type="text",
                 placeholder="Digite seu email", 
                 required="true" 
             %}
-                {% include 'partials/input-text.html' %}
+                {% include 'partials/input.html' %}
             {% endwith %}
             {% with 
-                id="pwd", 
-                title="Senha", 
+                id="password", 
+                title="Senha",
+                type="password",
                 placeholder="Digite sua Senha", 
                 required="true" 
             %}
-                {% include 'partials/input-text.html' %}
+                {% include 'partials/input.html' %}
             {% endwith %}
-            <input class="bg-[#eee] text-[#1E1E1E] text-[1.5rem] mt-[2rem] py-[.25rem]" type="submit" value="Entrar">
+            <input id="submitButton" class="bg-[#eee] text-[#1E1E1E] text-[1.5rem] mt-[2rem] py-[.25rem]" type="submit" value="Entrar">
         </form>
+        <div id="statusMessage" style="margin-top: 15px;"></div>
     </div>
+    <script src="{{ url_for('static', filename='js/login_ajax.js') }}"></script>
 {% endblock %}
