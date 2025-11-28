@@ -1,6 +1,165 @@
 {% extends "index.html" %}
-
 {% block title %} Banco anco | Home {% endblock %}
 
 {% block body %}
+
+<header class="bg-[#1E1E1E] text-white py-6 relative font-orbitron"> 
+    <div class="max-w-6xl mx-auto flex items-center justify-center relative">
+
+        <a href="/configuracoes" class="absolute left-4 top-4 w-8 h-8 flex items-center justify-center">
+            <img src="{{ url_for('static', filename='images/settings.png') }}" alt="Configurações" class="w-6 h-6"/>
+        </a>
+
+        <a href="/perfil" class="absolute right-4 top-4 w-8 h-8">
+            <img class="size-fit mb-[.5rem]" src="{{ url_for('static', filename='images/userimg.png') }}" alt="Foto do usuário"/>
+        </a>
+
+        <div class="flex flex-col items-center">
+            <img src="{{ url_for('static', filename='images/logo2.png') }}"
+                alt="Logo do banco"
+                class="w-20 h-20 mb-2"/>
+
+            <p class="text-center text-white text-lg leading-snug font-medium">
+                Olá,<br>
+                <span class="text-xl font-bold">João da Silva</span>
+            </p>
+        </div>
+
+    </div>
+</header>
+
+<div class="mx-[30px] pb-20"> 
+
+    {% block saldo %}
+    {% set saldo_disponivel = "5.000,00" %}
+    {% set conta = "12345-6" %}
+    {% set agencia = "0001" %}
+    
+    <section class="bg-[#111111] text-white rounded-xl py-6 font-orbitron mt-6"> 
+        <div class="px-[30px]">
+            <h2 class="text-lg font-semibold mb-2">Saldo disponível</h2>
+            <p class="text-3xl font-semibold text-[#d4d4d4] mb-1">$ {{ saldo_disponivel }}</p>
+            <p class="text-sm text-[#CCCCCC]">
+                Conta: {{ conta }}<br>
+                Agência: {{ agencia }}
+            </p>
+        </div>
+    </section>
+    {% endblock %}
+
+{% block acoes_rapidas_wrapper %}
+<section class="bg-[#111111] text-white rounded-xl py-4 font-orbitron mt-6">
+    <div class="px-[30px] flex justify-between"> 
+        
+        {% block acao_pix %} <a href="/favoritos" class="bg-[#111111] rounded-xl flex flex-col items-center p-3 hover:bg-[#1E1E1E] w-[22%] text-white">
+    <img src="{{ url_for('static', filename='images/pix branco.png') }}" class="w-6 h-6 mb-1 filter grayscale" alt="Favoritos"/>
+    <span class="text-xs">Pix</span>
+    </a>
+{% endblock %}
+
+{% block acao_pagar %} <a href="/fluxo" class="bg-[#111111] rounded-xl flex flex-col items-center p-3 hover:bg-[#1E1E1E] w-[22%] text-white">
+    <img src="{{ url_for('static', filename='images/boleto.png') }}" class="w-6 h-6 mb-1 filter grayscale" alt="Fluxo"/>
+    <span class="text-xs">Pagar</span>
+</a>
+{% endblock %}
+
+{% block acao_recarga %} <a href="/alertas" class="bg-[#111111] rounded-xl flex flex-col items-center p-3 hover:bg-[#1E1E1E] w-[22%] text-white">
+    <img src="{{ url_for('static', filename='images/recarga.png') }}" class="w-6 h-6 mb-1 filter grayscale" alt="Alerta"/>
+    <span class="text-xs">Recarga</span>
+</a>
+{% endblock %}
+
+{% block acao_transferir %} <a href="/grafico" class="bg-[#111111] rounded-xl flex flex-col items-center p-3 hover:bg-[#1E1E1E] w-[22%] text-white">
+    <img src="{{ url_for('static', filename='images/transferir.png') }}" class="w-6 h-6 mb-1 filter grayscale" alt="Gráfico"/>
+    <span class="text-xs">Transferir</span>
+</a>
+{% endblock %}
+
+    </div>
+</section>
+{% endblock %}
+
+    {% block extrato_rendimentos %}
+    <div class="space-y-6 mt-6">
+
+        {% set transacoes = [
+        {"tipo": "enviado", "descricao": "Pix Enviado", "data": "27 / 11 / 2025 22:01", "valor": "20,00"},
+        {"tipo": "recebido", "descricao": "Pix Recebido", "data": "27 / 11 / 2025 22:01", "valor": "20,00"},
+        {"tipo": "recebido", "descricao": "Pix Recebido", "data": "27 / 11 / 2025 22:01", "valor": "20,00"}
+        ] %}
+
+        {% set investimentos = [
+        {"nome": "Cdb", "periodicidade": "(Mensal)", "percentual": 20},
+        {"nome": "Tesouro Selic", "periodicidade": "(Mensal)", "percentual": 20},
+        {"nome": "Bitcoin", "periodicidade": "(Diário)", "percentual": -5},
+        {"nome": "XS024", "periodicidade": "(Diário)", "percentual": -5}
+        ] %}
+
+        <section class="bg-[#111111] text-white rounded-xl py-6 font-orbitron">
+            <div class="px-[30px]"> 
+                <h2 class="text-lg font-semibold mb-4">Extrato</h2>
+                <ul class="divide-y divide-gray-800">
+                    {% for item in transacoes %}
+                    {% set cor_extrato = 'text-[#6A9955]' if item.tipo == 'recebido' else 'text-[#995556]' %}
+                    <li class="py-3 flex justify-between items-center {{ cor_extrato }}">
+                        <div>
+                            <p class="text-sm font-medium">{{ item.descricao }}</p>
+                            <p class="text-xs text-gray-400">
+                                {{ item.data }}
+                            </p>
+                        </div>
+                        <p class="text-sm font-semibold">
+                            {% if item.tipo == 'recebido' %}+{% else %}—{% endif %} R$ {{ item.valor }}
+                        </p>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
+
+        <section class="bg-[#111111] text-white rounded-xl py-6 font-orbitron">
+            <div class="px-[30px]">
+                <h2 class="text-lg font-semibold mb-4">Info rendimentos</h2>
+                <div class="space-y-4">
+                    {% for inv in investimentos %}
+                    {% set cor_rendimento = 'text-[#6A9955]' if inv.percentual >= 0 else 'text-[#995556]' %}
+
+                    <div class="flex justify-between items-center {{ cor_rendimento }}">
+                        <div>
+                            <p class="text-sm font-medium">{{ inv.nome }}</p>
+                            <p class="text-xs text-gray-400">
+                                {{ inv.periodicidade }}
+                            </p>
+                        </div>
+                        <p class="text-sm font-semibold">
+                            {% if inv.percentual >= 0 %}+{% else %}—{% endif %} % {{ inv.percentual }},00
+                        </p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+    </div>
+    {% endblock %}
+
+</div> {% block footer %}
+<footer class="fixed bottom-0 left-0 w-full bg-[#111111] text-white font-orbitron">
+    <div class="flex justify-around py-3">
+        <a href="/home" class="flex flex-col items-center text-sm hover:text-[#6A9955]">
+            <img src="{{ url_for('static', filename='images/home.png') }}" class="w-5 h-5 mb-1" alt="Início"/>
+            Início
+        </a>
+        <a href="/carteira" class="flex flex-col items-center text-sm hover:text-[#6A9955]">
+            <img src="{{ url_for('static', filename='images/carteira.png') }}" class="w-5 h-5 mb-1" alt="Carteira"/>
+            Carteira
+        </a>
+        <a href="/mais" class="flex flex-col items-center text-sm hover:text-[#6A9955]">
+            <img src="{{ url_for('static', filename='images/menu.png') }}" class="w-5 h-5 mb-1" alt="Mais"/>
+            Mais
+        </a>
+    </div>
+</footer>
+{% endblock %}
+
 {% endblock %}

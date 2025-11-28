@@ -50,9 +50,8 @@ def logout():
     return redirect(url_for('login'))
 
 @app.route('/')
-@login_required
 def index():
-    return render_template('home.html')
+    return render_template('home/home.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
