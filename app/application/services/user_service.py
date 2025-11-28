@@ -10,8 +10,6 @@ class UserService:
     
     def login_user(self, dto: LoginDto):
         user = self.user_repository.find_user_by_email(dto.email)
-        print(dto)
-        print(user)
         if user:
             if check_password_hash(user.password, dto.password):
                 return user
